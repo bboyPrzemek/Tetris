@@ -19,7 +19,6 @@
 
    }
    
-   
    class Game{
       constructor(){
          this.createWalls();
