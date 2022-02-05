@@ -1,0 +1,31 @@
+:root {
+    --bg-color: linear-gradient(90deg, rgba(7,6,92,1) 23%, rgba(8,7,106,1) 62%, rgba(9,9,121,1) 92%);
+  }
+
+*{
+    margin: 0;
+    padding: 0;
+    font-size:50px;
+}
+html, 
+body{
+    font-family: 'VT323', monospace;
+    height: 100%;
+}
+
+body {
+    background: var(--bg-color);
+}
+
+.container{
+    margin-inline: auto;
+    display: flex;
+    height: 100%;
+    width: 1200px;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas{
+    background: var(--bg-color);
+}
