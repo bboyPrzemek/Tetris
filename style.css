@@ -32,3 +32,14 @@ canvas{
     border-width: 5px;
     border-image: linear-gradient(90deg, rgba(117,117,119,1) 23%, rgba(159,159,179,1) 62%, rgba(124,124,131,1) 92%) 1;
 }
+
+
+/*temp*/
+body{
+    position: relative;
+}
+#arr{
+    position: absolute;
+    top:0;
+    left: 0;
+}

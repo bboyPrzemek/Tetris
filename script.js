@@ -9,6 +9,18 @@
          [0, 0, 0, 0]
       ],
       [
+         [0, 1, 0, 0],
+         [1, 1, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]
+      ],
+      [
+         [0, 0, 1, 0],
+         [0, 1, 1, 0],
+         [0, 1, 0, 0],
+         [0, 0, 0, 0]
+      ],
+      [
          [0, 1, 1, 0],
          [0, 1, 1, 0],
          [0, 0, 0, 0],
@@ -24,176 +36,95 @@
       [
          [0, 0, 1, 0],
          [0, 0, 1, 0],
+         [0, 1, 1, 0],
+         [0, 0, 0, 0]
+      ],
+
+      [
+         [0, 0, 1, 0],
+         [0, 0, 1, 0],
          [0, 0, 1, 0],
          [0, 0, 1, 0]
       ]
 
    ];
-   let tileArr = [];
-   const colors = [
-      {x : "#f5ef42", y : "#000000"}, 
-      {x : "#c70e1d", y : "#000000"}, 
-      {x : "#4287f5", y : "#000000"},
-      {x : "#00FFFE", y : "#000000"}, 
-      {x : "#f54298", y : "#000000"}
-   ];
 
-   let board = [];
-   
+   const colors = ['#f5ef42', '#c70e1d', '#4287f5', '#00FFFE', '#f54298'];
+
    let canvas = document.getElementById('canvas');
    let ctx = canvas.getContext("2d");
-   let speed = 100;
-   const BRICK_SIZE = 25;
-   let randomTile = utils.randomNumber(0, tiles.length - 1);
-   console.log(randomTile)
+   let speed = 20;
+   let gameover = false;
+   let board = new Board();
 
-
-
-   class Tile {
-      constructor(x, y, bgColor, bdColor) {
-         this.x = x;
-         this.y = y;
-         this.bgColor = bgColor;
-         this.bdColor = bdColor;
+   
+   function play() {
+      if (gameover) {
+         return;
       }
-
-      draw() {
-         ctx.fillStyle = this.bdColor;
-         ctx.fillRect(this.x * BRICK_SIZE, this.y * BRICK_SIZE, BRICK_SIZE, BRICK_SIZE);
-         ctx.fillStyle = this.bgColor;
-         ctx.fillRect(this.x * BRICK_SIZE + 1, this.y * BRICK_SIZE + 1, BRICK_SIZE - 1, BRICK_SIZE - 1);
-      }
-
-      clear() {
-         ctx.clearRect(this.x * BRICK_SIZE, this.y * BRICK_SIZE, BRICK_SIZE, BRICK_SIZE);
-      }
-   }
-
-
-   class Shape {
-      constructor() {
-         this.createRandomShape();
-      }
-
-      createRandomShape() {
-         tileArr = [];
-         randomTile = utils.randomNumber(0, tiles.length - 1);
-         // let randomTile = utils.randomNumber(0, tiles.length - 1);
-         let randomColor = Math.floor(Math.random() * colors.length + 0);
-         let tile = tiles[randomTile];
-
-
-         for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-               if (tile[i][j]) {
-                  let tilex = new Tile(8 + j, i, colors[randomColor].x, colors[randomColor].y);
-                  tileArr.push(tilex);
-                  tilex.draw();
-               }
+      setTimeout(function () {
+         if (!board.currentShape && !board.checkCollisionBottom()) {
+            board.currentShape = createShape();
+         }
+         if (board.currentShape) {
+            if (!board.checkCollisionBottom()) {
+               board.currentShape.moveDown();
+               
+            } else {
+               board.fillBoard();
+               board.checkRow();
+               board.currentShape = '';
             }
          }
-      }
-   }
-
-
-   class Game {
-      constructor() {
-         this.play();
-      }
-
-      play() {
-         requestAnimationFrame(move);
-      }
-   }
-
-   function move() {
-      setTimeout(function () {
-         if (boardEndY()) {
-            tileArr.forEach(elem=>{
-               board.push(elem);
-            })
-            console.log(board)
-            new Shape();
-         }
-
-         tileArr.forEach(element => {
-            element.clear();
-         });
-
-         tileArr.forEach(element => {
-            element.y += 1;
-            element.draw();
-         });
-         requestAnimationFrame(move);
+         requestAnimationFrame(play);
       }, speed);
-
-
+   }
+   
+   function createShape() {
+      const randomTile = utils.randomNumber(0, tiles.length - 1);
+      const colorNum = utils.randomNumber(0, colors.length - 1);
+      return new Shape(tiles[randomTile], colors[colorNum], ctx);
 
    }
+
+   
 
    document.body.onkeyup = function (e) {
+      if (!board.currentShape) {
+         return;
+      }
       if (e.keyCode == 40) {
-         if (boardEndY()) {
-            return;
-         }
-         tileArr.forEach(element => {
-            element.clear();
-         });
-         tileArr.forEach(element => {
-            element.y += 1;
-            element.draw();
-         });
-
+         moveDown();
       } else if (e.keyCode == 37) {
-         if (shouldStopMovingX(0)) {
-            return;
-         }
-         tileArr.forEach(element => {
-            element.clear();
-         });
-         tileArr.forEach(element => {
-            element.x -= 1;
-            element.draw();
-         });
-
+         moveLeft();
       } else if (e.keyCode == 39) {
-         if (shouldStopMovingX(19)) {
-            return;
-         }
-         tileArr.forEach(element => {
-            element.clear();
-         });
-         tileArr.forEach(element => {
-            element.x += 1;
-            element.draw();
-         });
+         moveRight();
       }
    }
 
-   function shouldStopMovingX(posX) {
-      let exit = false;
-      tileArr.forEach(element => {
-         if (element.x == posX) {
-            exit = true;
-         }
-      })
-      return exit;
-   }
-
-   function boardEndY() {
-      let exit = false;
-      if (!tileArr.length) {
-         return true;
-      } else {
-         tileArr.forEach(element => {
-            if (element.y == 23) {
-               exit = true;
-            }
-         })
-         return exit;
+   function moveLeft() {
+      if (!board.checkCollisionLeft()) {
+         return;
       }
+      board.currentShape.moveLeft();
    }
 
-   new Game();
+   function moveRight() {
+      if (!board.checkCollisionRight()) {
+         return;
+      }
+      board.currentShape.moveRight();
+   }
+
+   function moveDown() {
+      if (board.checkCollisionBottom()) {
+         return;
+      }
+      board.currentShape.moveDown();
+
+   }
+
+   requestAnimationFrame(play);
+
 
 }())
