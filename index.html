@@ -10,11 +10,26 @@
 </head>
 <body>
     <div class="container">
-        
-        <canvas id="canvas" width="500px" height="600px">
+        <div class="left"></div>
+        <canvas id="canvas" width="300px" height="600px">
         </canvas>
+        <div class="right">
+            <p class="titleGame">Tetris</p>
+            <div class="buttons">
+                <button id="newGameBtn">New Game</button>
+                <button id="pauseBtn">Pause</button>
+            </div>
+        </div>
+    </div>
+    <div id="arr">
+        
     </div>
     
 </body>
+<script src="constans.js"></script>
+<script src="utils.js"></script>
+<script src="Tile.js"></script>
+<script src="Shape.js"></script>
+<script src="Board.js"></script>
 <script src="script.js"></script>
 </html>
