@@ -1,93 +1,46 @@
 (function () {
 
-   const tiles = [
-
-      [
-         [0, 1, 0, 0],
-         [0, 1, 1, 0],
-         [0, 0, 1, 0],
-         [0, 0, 0, 0]
-      ],
-      [
-         [0, 1, 0, 0],
-         [1, 1, 1, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]
-      ],
-      [
-         [0, 0, 1, 0],
-         [0, 1, 1, 0],
-         [0, 1, 0, 0],
-         [0, 0, 0, 0]
-      ],
-      [
-         [0, 1, 1, 0],
-         [0, 1, 1, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]
-      ],
-      [
-         [0, 1, 1, 0],
-         [0, 0, 1, 0],
-         [0, 0, 1, 0],
-         [0, 0, 0, 0]
-      ],
-
-      [
-         [0, 0, 1, 0],
-         [0, 0, 1, 0],
-         [0, 1, 1, 0],
-         [0, 0, 0, 0]
-      ],
-
-      [
-         [0, 0, 1, 0],
-         [0, 0, 1, 0],
-         [0, 0, 1, 0],
-         [0, 0, 1, 0]
-      ]
-
-   ];
-
-   const colors = ['#f5ef42', '#c70e1d', '#4287f5', '#00FFFE', '#f54298'];
-
    let canvas = document.getElementById('canvas');
    let ctx = canvas.getContext("2d");
-   let speed = 20;
+   
+   const bWidth = canvas.width/30;
+   const bHeight = canvas.height/30;
+   let speed = 300;
    let gameover = false;
-   let board = new Board();
+   let board = new Board(bWidth, bHeight, ctx);
+  
+   let pause = false;
+
 
    
    function play() {
-      if (gameover) {
+      if (gameover || pause) {
          return;
       }
       setTimeout(function () {
-         if (!board.currentShape && !board.checkCollisionBottom()) {
+         if (!board.currentShape && !board.canBottom()) {
             board.currentShape = createShape();
          }
          if (board.currentShape) {
-            if (!board.checkCollisionBottom()) {
-               board.currentShape.moveDown();
+            if (!board.canBottom()) {
+               board.moveBottom();
                
             } else {
-               board.fillBoard();
-               board.checkRow();
+               board.addShape();
+               board.clearFullRows();
                board.currentShape = '';
             }
          }
          requestAnimationFrame(play);
       }, speed);
-   }
+}
    
    function createShape() {
-      const randomTile = utils.randomNumber(0, tiles.length - 1);
+      const shapes = ["a", "b", "c", "d", "e", "f", "g"];
+      const randomTile = utils.randomNumber(0, shapes.length - 1);
       const colorNum = utils.randomNumber(0, colors.length - 1);
-      return new Shape(tiles[randomTile], colors[colorNum], ctx);
-
+      return new Shape(tiles[0][shapes[randomTile]], colors[colorNum]);
    }
-
-   
 
    document.body.onkeyup = function (e) {
       if (!board.currentShape) {
@@ -99,32 +52,44 @@
          moveLeft();
       } else if (e.keyCode == 39) {
          moveRight();
+      }else if (e.keyCode == 32) {
+         rotate();
       }
+   }
+
+   function rotate(){
+      board.rotate();
    }
 
    function moveLeft() {
-      if (!board.checkCollisionLeft()) {
-         return;
-      }
-      board.currentShape.moveLeft();
+      board.moveLeft();
    }
 
    function moveRight() {
-      if (!board.checkCollisionRight()) {
-         return;
-      }
-      board.currentShape.moveRight();
+      board.moveRight();
    }
 
    function moveDown() {
-      if (board.checkCollisionBottom()) {
-         return;
-      }
-      board.currentShape.moveDown();
-
+      board.moveBottom();
    }
 
-   requestAnimationFrame(play);
-
+   
+   document.getElementById("pauseBtn").onclick = function(){ 
+      pause = !pause
+      if (!pause){
+         play();
+      }
+   }
+   
+   document.getElementById("newGameBtn").onclick = function(){ 
+      ctx.clearRect(0, 0, canvas.width,canvas.height)
+      board = new Board(bWidth, bHeight, ctx);
+      if (pause){
+         pause = false;
+         play(); 
+      }  
+   }
+   
+   play();
 
 }())
