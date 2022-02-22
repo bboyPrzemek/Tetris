@@ -8,7 +8,7 @@ class Board {
       this.currentShape = '';
       this.points = 0;
       this.initializeBoard();
-      this.log();
+      //this.log();
    }
 
    initializeBoard() {
@@ -37,13 +37,13 @@ class Board {
          }
          isRowFull = true;
       }
-      console.log(fullRows)
+      //console.log(fullRows)
       return fullRows;
 
    }
 
    clearFullRows() {
-      this.log()
+      //this.log()
       let rowsToClear = this.getFullRows();
       rowsToClear.sort();
       if (rowsToClear != '') {
@@ -56,7 +56,7 @@ class Board {
                   }
                })
             })
-            this.log();
+            //this.log();
             this.ctx.clearRect(0, row * 30, 300, 30);
          })
 
@@ -64,7 +64,7 @@ class Board {
             this.updateBoard(e);
             this.points += 10;
          })
-         this.log();
+         //this.log();
       }
 
    }
@@ -85,17 +85,17 @@ class Board {
    }
 
 
-   log() {
-      let arr = document.getElementById('arr');
-      arr.innerHTML = "";
-      console.log(arr)
-      for (let i = 0; i < this.array.length; i++) {
-         for (let j = 0; j < this.array[i].length; j++) {
-            arr.innerHTML += this.array[i][j] + " ";
-         }
-         arr.innerHTML += "<br>";
-      }
-   }
+   // log() {
+   //    let arr = document.getElementById('arr');
+   //    arr.innerHTML = "";
+   //    console.log(arr)
+   //    for (let i = 0; i < this.array.length; i++) {
+   //       for (let j = 0; j < this.array[i].length; j++) {
+   //          arr.innerHTML += this.array[i][j] + " ";
+   //       }
+   //       arr.innerHTML += "<br>";
+   //    }
+   // }
 
 
 
@@ -122,7 +122,7 @@ class Board {
          })
 
       } else {
-         console.log(this.array)
+         //console.log(this.array)
          if (this.array[1][5]) {
             moveable = true;
          }
