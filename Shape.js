@@ -1,9 +1,9 @@
 class Shape {
    constructor(tilePattern, color) {
       this.tiles = [];
+      this.nextRotated = [];
       this.color = color;
       this.index = utils.randomNumber(0, 3);
-      this.nextRotated = [];
       this.tilePattern = tilePattern;
       this.init();
    }

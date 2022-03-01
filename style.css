@@ -33,10 +33,10 @@ canvas{
 }
 
 
-/*temp*/
 body{
     position: relative;
 }
+
 button{
     display: block;
     text-align: center;
@@ -59,8 +59,4 @@ button{
 .titleGame{
     font-size:70px;
 }
-#arr{
-    position: absolute;
-    top:0;
-    left: 0;
-}
+

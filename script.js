@@ -3,12 +3,11 @@
    let canvas = document.getElementById('canvas');
    let ctx = canvas.getContext("2d");
    
-   const bWidth = canvas.width/30;
-   const bHeight = canvas.height/30;
+   const bWidth = canvas.width / 30;
+   const bHeight = canvas.height / 30;
    let speed = 300;
    let gameover = false;
    let board = new Board(bWidth, bHeight, ctx);
-  
    let pause = false;
 
 
