@@ -5,7 +5,5 @@ let utils = (function(){
 
     return {
         randomNumber : getRandomNumber,
-    }
-
-    
+    } 
 }())

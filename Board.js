@@ -6,13 +6,10 @@ class Board {
       this.ctx = ctx;
       this.array = new Array(this.height);
       this.currentShape = '';
-      this.points = 0;
       this.initializeBoard();
-      //this.log();
    }
 
    initializeBoard() {
-      console.log('1')
       for (let i = 0; i < this.array.length; i++) {
          this.array[i] = new Array(this.width);
       }
@@ -37,13 +34,11 @@ class Board {
          }
          isRowFull = true;
       }
-      //console.log(fullRows)
       return fullRows;
 
    }
 
    clearFullRows() {
-      //this.log()
       let rowsToClear = this.getFullRows();
       rowsToClear.sort();
       if (rowsToClear != '') {
@@ -56,15 +51,12 @@ class Board {
                   }
                })
             })
-            //this.log();
             this.ctx.clearRect(0, row * 30, 300, 30);
          })
 
          rowsToClear.forEach(e => {
             this.updateBoard(e);
-            this.points += 10;
          })
-         //this.log();
       }
 
    }
@@ -83,21 +75,6 @@ class Board {
          }
       }
    }
-
-
-   // log() {
-   //    let arr = document.getElementById('arr');
-   //    arr.innerHTML = "";
-   //    console.log(arr)
-   //    for (let i = 0; i < this.array.length; i++) {
-   //       for (let j = 0; j < this.array[i].length; j++) {
-   //          arr.innerHTML += this.array[i][j] + " ";
-   //       }
-   //       arr.innerHTML += "<br>";
-   //    }
-   // }
-
-
 
    addShape() {
       this.currentShape.tiles.forEach(tile => {
@@ -122,7 +99,6 @@ class Board {
          })
 
       } else {
-         //console.log(this.array)
          if (this.array[1][5]) {
             moveable = true;
          }
@@ -189,7 +165,7 @@ class Board {
       this.currentShape.nextRotated.forEach(element => {
          if (element.x == this.width || this.array[element.y][element.x + 1] ||
             this.array[element.y + 1][element.x] ||
-            this.array[element.y][element.x] == '1' || element.x < 0
+            this.array[element.y][element.x] || element.x < 0
          ) {
             moveable = false;
          }
